@@ -12,6 +12,7 @@ It's a fun challenge from [here](https://adventofcode.com).
 * [2016](https://adventofcode.com/2016)
 * [2017](https://adventofcode.com/2017)
 * [2018](https://adventofcode.com/2018)
+    * [1](https://adventofcode.com/2018/day/1) *
 
 # Languages Used
 * Python
