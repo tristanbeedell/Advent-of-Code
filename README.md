@@ -1,18 +1,18 @@
 # Advent of Code Solutions
 
-It's a fun challenge from [here](https://adventofcode.com).
+It\'s a fun challenge from [here](https://adventofcode.com).
 
 # Completed Challenges
 
 * [2015](https://adventofcode.com/2015)
-    * [1](https://adventofcode.com/2015/day/1) * *
-    * [2](https://adventofcode.com/2015/day/2) * *
-    * [3](https://adventofcode.com/2015/day/3) * *
-    * [4](https://adventofcode.com/2015/day/4) * *
+    * [1](https://adventofcode.com/2015/day/1) py * *
+    * [2](https://adventofcode.com/2015/day/2) js * *
+    * [3](https://adventofcode.com/2015/day/3) py * *
+    * [4](https://adventofcode.com/2015/day/4) py * *
 * [2016](https://adventofcode.com/2016)
 * [2017](https://adventofcode.com/2017)
 * [2018](https://adventofcode.com/2018)
-    * [1](https://adventofcode.com/2018/day/1) *
+    * [1](https://adventofcode.com/2018/day/1) js * *
 
 # Languages Used
 * Python
