@@ -15,7 +15,7 @@ It's a fun challenge from [here](https://adventofcode.com).
 	* [1](https://adventofcode.com/2018/day/1) js * *
 	* [2](https://adventofcode.com/2018/day/2) py * *
 	* [3](https://adventofcode.com/2018/day/3) js * *
-	* [4](https://adventofcode.com/2018/day/4) js *
+	* [4](https://adventofcode.com/2018/day/4) js * *
 
 # Languages Used
 * Python
