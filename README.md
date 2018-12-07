@@ -1,24 +1,29 @@
 # Advent of Code Solutions
 
-It's a fun challenge from [here](https://adventofcode.com).
+It's a fun challenge. [2018](https://adventofcode.com/2018) is currently in progress.
+
+```js
+if (advent) {
+	programmer.gotTo("adventofcode.com");
+}
+```
 
 # Completed Challenges
+#### [2015](https://adventofcode.com/2015 "2015 puzzle calendar")
+1. [py :star: :star:](https://adventofcode.com/2015/day/1 "see puzzle")
+1. [js  :star: :star:](https://adventofcode.com/2015/day/2 "see puzzle")
+1. [py  :star: :star:](https://adventofcode.com/2015/day/3 "see puzzle")
+1. [py  :star: :star:](https://adventofcode.com/2015/day/5 "see puzzle")
+1. [-](https://adventofcode.com/2015/day/1 "see puzzle")
 
-* [2015](https://adventofcode.com/2015)
-	* [1](https://adventofcode.com/2015/day/1) py * *
-	* [2](https://adventofcode.com/2015/day/2) js * *
-	* [3](https://adventofcode.com/2015/day/3) py * *
-	* [4](https://adventofcode.com/2015/day/4) py * *
-* [2016](https://adventofcode.com/2016)
-* [2017](https://adventofcode.com/2017)
-* [2018](https://adventofcode.com/2018)
-	* [1](https://adventofcode.com/2018/day/1) js * *
-	* [2](https://adventofcode.com/2018/day/2) py * *
-	* [3](https://adventofcode.com/2018/day/3) js * *
-	* [4](https://adventofcode.com/2018/day/4) js * *
-	* [5](https://adventofcode.com/2018/day/5) js * *
-	* [6](https://adventofcode.com/2018/day/6) js * *
+#### [2018](https://adventofcode.com/2018 "2018 puzzle calendar")
+1. [js :star: :star:](https://adventofcode.com/2015/day/1 "see puzzle")
+1. [py  :star: :star:](https://adventofcode.com/2015/day/2 "see puzzle")
+1. [js  :star: :star:](https://adventofcode.com/2015/day/3 "see puzzle")
+1. [js  :star: :star:](https://adventofcode.com/2015/day/4 "see puzzle")
+1. [js  :star: :star:](https://adventofcode.com/2015/day/5 "see puzzle")
+1. [js  :star: :star: :point_left:](https://adventofcode.com/2015/day/6 "see puzzle")
 
-# Languages Used
-* Python
-* Node js
+## Languages Used
+* Python 8&times;:star:
+* Node JS 12&times;:star:
