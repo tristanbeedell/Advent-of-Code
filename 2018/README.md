@@ -22,4 +22,4 @@
 1. [:star: :star:](https://adventofcode.com/2018/day/4 "see puzzle")
 1. [:star: :star:](https://adventofcode.com/2018/day/5 "see puzzle")
 1. [:star: :star:](https://adventofcode.com/2018/day/6 "see puzzle")
-1. [:star:](https://adventofcode.com/2018/day/7 "see puzzle")
+1. [:star: :star:](https://adventofcode.com/2018/day/7 "see puzzle")
