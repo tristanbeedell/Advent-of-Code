@@ -24,8 +24,9 @@ if (advent) {
 1. [js  :star: :star:](https://adventofcode.com/2015/day/5 "see puzzle")
 1. [js  :star: :star:](https://adventofcode.com/2015/day/6 "see puzzle")
 1. [js  :star: :star:](https://adventofcode.com/2015/day/7 "see puzzle")
-1. [js  :star:](https://adventofcode.com/2015/day/8 "see puzzle")
+1. [js  :star: :star:](https://adventofcode.com/2015/day/8 "see puzzle")
+1. [js  :star: :star:](https://adventofcode.com/2015/day/9 "see puzzle")
 
 ## Languages Used
-* Python 8&times;:star:
-* Node JS 14&times;:star:
+* Python
+* Node JS
