@@ -3,7 +3,6 @@ const input = fs.readFileSync('input.txt', 'utf-8').split('\n')[0].split(' ').ma
 
 function parse(arr) {
 	if (arr[0] == 0) {
-		debugger;
 		return ([2 + arr[1], arr.slice(2, 2 + arr[1])]);
 	}
 	let meta = []
