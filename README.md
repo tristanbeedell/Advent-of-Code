@@ -1,10 +1,10 @@
 # Advent of Code Solutions
 
-It's a fun challenge. [2018](https://adventofcode.com/2018) is currently in progress.
+It's a fun challenge. [2018](#2018) is currently in progress.
 
 ```js
 if (advent) {
-	programmer.gotTo("adventofcode.com");
+	programmer.goTo("adventofcode.com");
 }
 ```
 
@@ -18,21 +18,22 @@ if (advent) {
 1. [:star:](https://adventofcode.com/2015/day/6 "see puzzle")
 
 #### [2018](https://adventofcode.com/2018 "2018 puzzle calendar")
-1. [:star: :star:](https://adventofcode.com/2015/day/1 "see puzzle")
-1. [:star: :star:](https://adventofcode.com/2015/day/2 "see puzzle")
-1. [:star: :star:](https://adventofcode.com/2015/day/3 "see puzzle")
-1. [:star: :star:](https://adventofcode.com/2015/day/4 "see puzzle")
-1. [:star: :star:](https://adventofcode.com/2015/day/5 "see puzzle")
-1. [:star: :star:](https://adventofcode.com/2015/day/6 "see puzzle")
-1. [:star: :star:](https://adventofcode.com/2015/day/7 "see puzzle")
-1. [:star: :star:](https://adventofcode.com/2015/day/8 "see puzzle")
-1. [:star: :star:](https://adventofcode.com/2015/day/9 "see puzzle")
-1. [:star: :star:](https://adventofcode.com/2015/day/9 "see puzzle")
+1. [:star: :star:](https://adventofcode.com/2018/day/1 "see puzzle")
+1. [:star: :star:](https://adventofcode.com/2018/day/2 "see puzzle")
+1. [:star: :star:](https://adventofcode.com/2018/day/3 "see puzzle")
+1. [:star: :star:](https://adventofcode.com/2018/day/4 "see puzzle")
+1. [:star: :star:](https://adventofcode.com/2018/day/5 "see puzzle")
+1. [:star: :star:](https://adventofcode.com/2018/day/6 "see puzzle")
+1. [:star: :star:](https://adventofcode.com/2018/day/7 "see puzzle")
+1. [:star: :star:](https://adventofcode.com/2018/day/8 "see puzzle")
+1. [:star: :star:](https://adventofcode.com/2018/day/9 "see puzzle")
+1. [:star: :star:](https://adventofcode.com/2018/day/10 "see puzzle")
+1. [:star: :star:](https://adventofcode.com/2018/day/11 "see puzzle")
 
 ## Languages Used
 * Python
-	- .py
+	- py
 * Node JS
- 	- .js
+ 	- js
 * Java (Processing)
-	- .pde
+	- pde
