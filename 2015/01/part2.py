@@ -1,4 +1,7 @@
-with open('input.txt', 'r') as input:
+import os
+path = os.path.dirname(os.path.abspath(__file__))
+
+with open(path+'/input.txt', 'r') as input:
 	pos = 0
 	char_pos = 0
 	text = input.readline()

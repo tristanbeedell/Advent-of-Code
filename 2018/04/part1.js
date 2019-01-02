@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-let input = fs.readFileSync('input.txt', 'utf-8').split('\n').sort((a, b) => val(a).getTime() - val(b).getTime());
+let input = fs.readFileSync(`${__dirname}/input.txt`, 'utf-8').split('\n').sort((a, b) => val(a).getTime() - val(b).getTime());
 
 function val(a) {
 	let time = new Date(a.match(/\[(.*)\]/)[1]);

@@ -1,4 +1,7 @@
-with open("input.txt", "r") as commands:
+import os
+path = os.path.dirname(os.path.abspath(__file__))
+
+with open(path+"/input.txt", "r") as commands:
 	x = 0
 	y = 0
 	history = []
