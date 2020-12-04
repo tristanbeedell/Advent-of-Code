@@ -2,3 +2,4 @@ build
 frames
 .DS_Store
 .vscode
+.replit
