@@ -48,6 +48,7 @@ if (advent) {
 5. [:star: :star:](https://adventofcode.com/2020/day/5 "see puzzle")
 6. [:star: :star:](https://adventofcode.com/2020/day/6 "see puzzle")
 7. [:star: :star:](https://adventofcode.com/2020/day/7 "see puzzle")
+8. [:star: :star:](https://adventofcode.com/2020/day/8 "see puzzle")
 
 ## Languages Used
 * Python
