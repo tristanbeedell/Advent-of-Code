@@ -52,6 +52,7 @@ if (advent) {
 9. [:star: :star:](https://adventofcode.com/2020/day/9 "see puzzle")
 10. [:star: :star:](https://adventofcode.com/2020/day/10 "see puzzle")
 11. [:star: :star:](https://adventofcode.com/2020/day/11 "see puzzle")
+12. [:star: :star:](https://adventofcode.com/2020/day/12 "see puzzle")
 
 ## Languages Used
 * Python
@@ -60,3 +61,7 @@ if (advent) {
  	- js
 * Java (Processing)
 	- pde
+* HTML, CSS, JavaScript
+	- html
+  - css
+  - js

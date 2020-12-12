@@ -1,5 +1,5 @@
 const fs = require('fs');
-const data = fs.readFileSync('input.txt', 'utf-8');
+const data = fs.readFileSync('./input.txt', 'utf-8');
 const lines = data.split('\n').map(num => parseInt(num)).sort((a,b)=>(a-b));
 lines.unshift(0); // add the outlet with joltage 0
 lines.push(lines[lines.length-1]+3); // your device has a joltage 3 above the highest

@@ -1,0 +1,27 @@
+#output {
+  display: block;
+  overflow-y: scroll;
+  height: 100px;
+}
+
+#input {
+  position: absolute;
+  top: 8px;
+  left: 516px;
+  height: 500px;
+}
+
+input {
+  direction: rtl;
+}
+
+canvas, #output {
+  background-color: #10101a;
+  border: 1px solid #333340;
+}
+
+body {
+  background-color: #0f0f23;
+  color: #cccccc;
+  font-family: "Source Code Pro", monospace;
+}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>day 12 visualisation</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <canvas id="can" width="500" height="500"></canvas>
+    <br>
+    <label for="scalerange">scale</label>
+    <input name="scalerange" type="range" min="-1" max="1.5" step="0.01" value="0" id="scale">
+    <label for="speedrange">speed</label>
+    <input name="speedrange" type="range" min="15" max="1000" step="1" value="1000" id="speed" onchange="setSpeed()">
+    <textarea rows="5" id="input" onchange="reset();setSpeed()">F10
+N3
+F7
+R90
+F11</textarea>
+    <label for="loopbox">loop?</label>
+    <input type="checkbox" id="loop" name="loopbox" checked="true" onchange="setSpeed()">
+    <div id="output"></div>
+    <button id="clearbutton">clear</button>
+    <script src="script.js"></script>
+  </body>
+</html>
