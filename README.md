@@ -59,3 +59,4 @@ if (advent) {
 16. [:star: :star:](https://adventofcode.com/2020/day/16 "see puzzle")
 17. [:star: :star:](https://adventofcode.com/2020/day/17 "see puzzle")
 18. [:star: :star:](https://adventofcode.com/2020/day/18 "see puzzle")
+19. [:star:](https://adventofcode.com/2020/day/19 "see puzzle")
