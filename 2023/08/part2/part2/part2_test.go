@@ -55,18 +55,12 @@ func TestStepsToSolve(t *testing.T) {
 		"22Z": [2]string{"22B", "22B"},
 		"XXX": [2]string{"XXX", "XXX"},
 	}
-	start, steps, err := StepsToSolve("RL", net, "11B")
+	steps, err := StepsToSolve("LR", net, "11A")
 	equal(t, err, nil)
-	equal(t, start, 0)
 	equal(t, steps, 2)
-	start, steps, err = StepsToSolve("LR", net, "11A")
+	steps, err = StepsToSolve("LR", net, "22A")
 	equal(t, err, nil)
-	equal(t, start, 1)
-	equal(t, steps, 2)
-	start, steps, err = StepsToSolve("LR", net, "22A")
-	equal(t, err, nil)
-	equal(t, start, 1)
-	equal(t, steps, 6)
+	equal(t, steps, 3)
 }
 
 func TestLCM(t *testing.T) {

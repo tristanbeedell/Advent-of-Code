@@ -14,7 +14,7 @@ func StepsToSolveAll(ins string, net Network) (int, error) {
 	current := GetStarts(net)
 	res := 1
 	for _,start := range current {
-		_, steps, err := StepsToSolve(ins, net, start)
+		steps, err := StepsToSolve(ins, net, start)
 		if err != nil {
 			return 0, err
 		}
@@ -43,10 +43,9 @@ func IsDone(state []string) bool {
 	return true
 }
 
-func StepsToSolve(ins string, net Network, start string) (int, int, error) {
+func StepsToSolve(ins string, net Network, start string) (int, error) {
 	current := start
 	steps := 0;
-	history := []string{current}
 	for {
 		switch ins[steps  % len(ins)] {
 		case 'L':
@@ -54,15 +53,12 @@ func StepsToSolve(ins string, net Network, start string) (int, int, error) {
 		case 'R':
 			current = net[current][1]
 		default:
-			return 0, 0, fmt.Errorf("instructions unclear! Must only be 'R' and 'L', but got '%c' at [%v]", ins[steps], steps)
+			return 0, fmt.Errorf("instructions unclear! Must only be 'R' and 'L', but got '%c' at [%v]", ins[steps], steps)
 		}
 		steps ++
-		for step, state := range history {
-			if state == current && step == steps % len(ins) {
-				return step, steps-step, nil
-			}
+		if current[2] == goal {
+			return steps, nil
 		}
-		history = append(history, current)
 	}
 
 }
