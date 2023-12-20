@@ -19,7 +19,7 @@ func main() {
 		text = strings.Trim(text, "\n")
 		points := score(text);
 
-		fmt.Printf("%v: %v\n", text, points);
+		// fmt.Printf("%v: %v\n", text, points);
 
 		newMultipliers := []int{};
 		for i := range multipliers {
@@ -36,7 +36,7 @@ func main() {
 		}
 
 		total += multiplier;
-		fmt.Printf("+%v = %v\n", multiplier, total);
+		fmt.Printf("%v | +%v = %v\n", points, multiplier, total);
 	}
 
 	fmt.Printf("total cards: %v", total);
