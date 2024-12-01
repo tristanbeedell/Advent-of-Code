@@ -66,4 +66,14 @@ if (advent) {
 1. [:star: :star:](https://adventofcode.com/2023/day/1 "see puzzle")
 2. [:star: :star:](https://adventofcode.com/2023/day/2 "see puzzle")
 3. [:star: :star:](https://adventofcode.com/2023/day/3 "see puzzle")
+4. [:star: :star:](https://adventofcode.com/2023/day/4 "see puzzle")
+5. [:star: :star:](https://adventofcode.com/2023/day/5 "see puzzle")
+6. [:star: :star:](https://adventofcode.com/2023/day/6 "see puzzle")
+7. [:star: :star:](https://adventofcode.com/2023/day/7 "see puzzle")
+8. [:star: :star:](https://adventofcode.com/2023/day/8 "see puzzle")
+9. [:star: :star:](https://adventofcode.com/2023/day/9 "see puzzle")
+10. [:star: :star:](https://adventofcode.com/2023/day/10 "see puzzle")
+
+#### [2024](https://adventofcode.com/2024 "2024 puzzle calendar")
+1. [:star: :star:](https://adventofcode.com/2024/day/1 "see puzzle")
 
