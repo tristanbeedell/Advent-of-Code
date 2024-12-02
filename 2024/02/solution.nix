@@ -23,6 +23,7 @@
       }
     )
     {safe = true;};
+
   abs = n: if n > 0 then n else -n;
 
   countSafety = lib.lists.count (level: level.safe);
@@ -35,4 +36,42 @@
   ;
 
   part1result = getPart1Result content;
+
+  excluding = l: i: let
+    len = builtins.length l;
+    before = lib.sublist 0 (i) l;
+    after = lib.sublist (i + 1) (len - 1) l;
+  in before ++ after
+  ;
+
+  dampLevels = l: let
+    len = builtins.length l;
+    range = lib.range 0 (len - 1);
+    toTest = map (excluding l) range
+    ;
+  in toTest;
+
+  anySafety = builtins.any (level: level.safe);
+
+  dampSafety = level: level
+    |> dampLevels
+    |> map isSafe
+    |> anySafety
+  ;
+
+  isSafeWithDamp = level:
+    ( isSafe level ).safe || ( dampSafety level )
+  ;
+
+  countSafeWithDamp = levels: levels
+    |> map isSafeWithDamp
+    |> lib.count (a: a == true)
+  ;
+
+  part2result = content
+    |> toLines
+    |> toLevels
+    |> countSafeWithDamp
+  ;
+
 }

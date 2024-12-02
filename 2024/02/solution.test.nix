@@ -4,7 +4,7 @@ let
   solution = import ./solution.nix pkgs;
   example = (solution {file = ./example.txt;});
 in [
-  (describe "part1" [
+  (describe "part 1" [
     (it "gets file content" {
       expected = ''
         7 6 4 2 1
@@ -71,5 +71,55 @@ in [
         8 6 4 4 1
         1 3 6 7 9'';
     })
+  ])
+  (describe "part 2" [
+
+    (it "excludes index" {
+      expected = [1 2 4 5];
+      actual = example.excluding [1 2 7 4 5] 2;
+    })
+
+    (it "gets damp level" {
+      expected = [
+        [2 7 4 5]
+        [1 7 4 5]
+        [1 2 4 5]
+        [1 2 7 5]
+        [1 2 7 4]
+      ];
+      actual = [1 2 7 4 5]
+        |> example.dampLevels
+      ;
+    })
+
+    (it "gets damp safety" {
+      expected = true;
+      actual = example.dampSafety [1 2 7 4 5]
+      ;
+    })
+
+    (it "gets optional damp safety" {
+      expected = true;
+      actual = example.isSafeWithDamp [1 2 7 4 5]
+      ;
+    })
+
+    (it "counts optional damp safety" {
+      expected = 4;
+      actual = example.countSafeWithDamp [
+        [7 6 4 2 1]
+        [1 2 7 8 9]
+        [9 7 6 2 1]
+        [1 3 2 4 5]
+        [8 6 4 4 1]
+        [1 3 6 7 9]
+      ];
+    })
+
+    (it "counts optional damp safety from input" {
+      expected = 4;
+      actual = example.part2result;
+    })
+
   ])
 ]
