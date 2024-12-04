@@ -69,4 +69,56 @@
     + findXMAS (rotated content)
     + findXMAS (diagonal (reversed content))
   ;
+
+  xmasMatcher = let
+    xmas = ''
+      M.S
+      .A.
+      M.S'';
+  in 
+    "${xmas}|${rotated xmas}|${reversed xmas}|${rotated (reversed xmas)}";
+
+  isX-MAS = s: s
+    |> builtins.match xmasMatcher
+    |> lib.isList
+  ;
+
+  break3s = s: let
+    len = builtins.length s - 2;
+  in
+    builtins.genList (i: lib.sublist i 3 s) len
+  ;
+
+  break3lines = s: s
+    |> lib.splitString "\n"
+    |> map lib.stringToCharacters
+    |> break3s
+  ;
+
+  log = t: lib.traceSeq t t;
+
+  break3x3s = l: l
+    |> map break3s
+    |> (groups:
+      let empty = builtins.elemAt groups 0 
+        |> builtins.length
+        |> genStrList [];
+      in builtins.foldl'
+      (lib.zipListsWith (a: b: a ++ ["\n"] ++ b))
+      empty groups)
+    |> map lib.concatStrings
+    |> map lib.trim
+  ;
+
+  break3x3 = s: s
+    |> break3lines
+    |> map break3x3s
+    |> builtins.concatLists
+  ;
+
+  part2result = content
+    |> break3x3
+    |> lib.count isX-MAS
+  ;
+
 }
