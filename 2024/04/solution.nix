@@ -95,8 +95,6 @@
     |> break3s
   ;
 
-  log = t: lib.traceSeq t t;
-
   break3x3s = l: l
     |> map break3s
     |> (groups:
