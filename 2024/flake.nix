@@ -15,8 +15,19 @@
       example = (pkgs.lib.readFile ./06/example.txt);
       input = (pkgs.lib.readFile ./06/input.txt);
     in {
-      part1example = (solution example);
-      part1 = (solution input);
+      example = (solution example);
+      sample1 = (solution ''
+.#..
+.^#.
+.#..'');
+      sample2 = (solution ''
+.#......
+........
+.....#..
+#.......
+..#.#...
+...^....'');
+      real = (solution input);
     };
 
     packages.x86_64-linux.watch = tix.watch {
