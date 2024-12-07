@@ -128,4 +128,108 @@
 
   annotated = chart |> annotatePath |> annotateObs |> chartToStr;
 
+  # FASTER!
+
+  startingObsMap = getObsMap chart;
+
+  getObsMap = let
+    findObs = lib.lists.findFirstIndex (b: b == "#") null;
+  in chart: chart
+    |> lib.imap0 (y: line: line
+      |> lib.imap0 (x: char: if char != "#" then null else {
+        right = if y + 1 >= height || x + 1 >= width then null else (chart
+          |> index (y + 1)
+          |> lib.sublist (x + 1) width
+          |> findObs
+          |> maybeAdd (x + 1)
+        );
+        left = if y < 1 || x <= 0 then null else (chart
+          |> index (y - 1)
+          |> lib.sublist 0 (x)
+          |> lib.reverseList
+          |> findObs
+          |> maybeSub (x - 1)
+        );
+        down = if x < 1 then null else (chart
+          |> lib.sublist (y + 1) (height)
+          |> map (index (x - 1))
+          |> findObs
+          |> maybeAdd (y + 1)
+        );
+        up = if x + 1 >= width then null else (searchUp (b: b == "#") {x = x + 1; y = y - 1;} chart);
+      })
+    )
+  ;
+
+  maybe = f: b: if isNull b then null else f b;
+  maybeAdd = v: builtins.add v |> maybe;
+  maybeSub = v: builtins.sub v |> maybe;
+
+  searchUp = matcher: {x, y}: chart: chart
+    |> lib.sublist 0 (y + 1)
+    |> map (index (x))
+    |> lib.reverseList
+    |> lib.lists.findFirstIndex matcher null
+    |> maybeSub (y)
+  ;
+
+  firstOb = {
+    y = searchUp (i: !isNull i) startingPos startingObsMap;
+    x = startingPos.x;
+  };
+
+  index2d = {x, y}: m: m |> index y |> index x;
+
+  lookRight = obsMap: prev: {
+    x = (index2d prev obsMap).right;
+    y = prev.y + 1;
+  };
+
+  lookDown = obsMap: prev: {
+    x = prev.x - 1;
+    y = (index2d prev obsMap).down;
+  };
+
+  lookLeft = obsMap: prev: {
+    x = (index2d prev obsMap).left;
+    y = prev.y - 1;
+  };
+
+  lookUp = obsMap: prev: {
+    x = prev.x + 1;
+    y = (index2d prev obsMap).up;
+  };
+
+  getNextDir = i: [lookRight lookDown lookLeft lookUp]
+    |> index (lib.mod i 4)
+  ;
+
+  getFastpath = {i ? 0, pos ? firstOb, obsMap ? startingObsMap, hist ? []}: let
+    nextPos = (getNextDir i) obsMap pos;
+    newHist = hist ++ [point];
+    point = pos // {dir = lib.mod i 4;};
+    looped = lib.elem point hist;
+  in if isNull pos.x || isNull pos.y || looped
+  then {path = hist ++ [pos]; inherit looped;}
+  else getFastpath {i = i + 1; pos = nextPos; hist = newHist; inherit obsMap;}
+  ;
+
+  fastpath = getFastpath {};
+
+  allObs = builtins.genList (i: {
+    x = lib.mod i width;
+    y = i / height;
+  }) (height * width)
+    |> builtins.filter (pos: index2d pos chart == ".")
+    |> map ({x, y}: replace2d {inherit x y;} "#" chart)
+  ;
+
+  # this is a really slow way to do this, instead just find the adjacent columns and update accordingly
+  allMaps = allObs |> map getObsMap;
+
+  loopyMaps = allMaps
+    |> builtins.filter (m: (getFastpath {obsMap = m;}).looped);
+
+  part2faster = builtins.length loopyMaps;
+
 }

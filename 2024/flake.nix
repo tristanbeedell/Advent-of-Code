@@ -17,28 +17,31 @@
     in {
       example = (solution example);
       sample1 = (solution ''
-.#..
-.^#.
-.#..'');
+.#.
+..#
+#^.
+.#.'');
       sample2 = (solution ''
-.#......
-........
-.....#..
-#.......
-..#.#...
-...^....'');
+.#....
+......
+.....#
+#.....
+..#.#.
+...^..'');
       real = (solution input);
     };
 
-    packages.x86_64-linux.watch = tix.watch {
-      cmd = ''
-        nix run .\#test --impure --extra-experimental-features pipe-operators
-      '';
+    day07 = let
+      solution = import ./07/solution.nix pkgs;
+      example = (pkgs.lib.readFile ./07/example.txt);
+      input = (pkgs.lib.readFile ./07/input.txt);
+    in {
+      example = (solution example);
+      real = (solution input);
+      test = tix.run [
+        ./07/solution.test.nix
+      ];
     };
-
-    packages.x86_64-linux.test = tix.run [
-      ./solution.test.nix
-    ];
 
   };
 }
