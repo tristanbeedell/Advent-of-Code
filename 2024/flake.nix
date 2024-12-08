@@ -16,18 +16,6 @@
       input = (pkgs.lib.readFile ./06/input.txt);
     in {
       example = (solution example);
-      sample1 = (solution ''
-.#.
-..#
-#^.
-.#.'');
-      sample2 = (solution ''
-.#....
-......
-.....#
-#.....
-..#.#.
-...^..'');
       real = (solution input);
     };
 
@@ -48,8 +36,8 @@
       example = (pkgs.lib.readFile ./08/example);
       input = (pkgs.lib.readFile ./08/input);
     in {
-      solution = solution;
-      part1result = solution.part1result input;
+      example = solution example;
+      real = solution input;
       test = tix.run [
         ./08/solution.test.nix
       ];
