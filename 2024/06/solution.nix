@@ -132,45 +132,56 @@
 
   startingObsMap = getObsMap chart;
 
-  getObsMap = let
-    findObs = lib.lists.findFirstIndex (b: b == "#") null;
-  in chart: chart
+  getObsMap = chart: chart
     |> lib.imap0 (y: line: line
-      |> lib.imap0 (x: char: if char != "#" then null else {
-        right = if y + 1 >= height || x + 1 >= width then null else (chart
-          |> index (y + 1)
-          |> lib.sublist (x + 1) width
-          |> findObs
-          |> maybeAdd (x + 1)
-        );
-        left = if y < 1 || x <= 0 then null else (chart
-          |> index (y - 1)
-          |> lib.sublist 0 (x)
-          |> lib.reverseList
-          |> findObs
-          |> maybeSub (x - 1)
-        );
-        down = if x < 1 then null else (chart
-          |> lib.sublist (y + 1) (height)
-          |> map (index (x - 1))
-          |> findObs
-          |> maybeAdd (y + 1)
-        );
-        up = if x + 1 >= width then null else (searchUp (b: b == "#") {x = x + 1; y = y - 1;} chart);
-      })
+      |> lib.imap0 (x: char: if char != "#" then null else makeObs chart (b: b == "#") {inherit x y;})
     )
   ;
 
-  maybe = f: b: if isNull b then null else f b;
-  maybeAdd = v: builtins.add v |> maybe;
-  maybeSub = v: builtins.sub v |> maybe;
+  makeObs = chart: matcher: {x, y}: {
+    right = if y + 1 >= height || x + 1 >= width then null else 
+      searchRight matcher {x = x + 1; y = y + 1;} chart;
 
-  searchUp = matcher: {x, y}: chart: chart
-    |> lib.sublist 0 (y + 1)
-    |> map (index (x))
+    left = if y < 1 || x <= 0 then null else
+      searchLeft matcher {x = x - 1; y = y - 1;} chart;
+
+    down = if x <= 0 || y + 1 >= width then null else 
+      searchDown matcher {x = x - 1; y = y + 1;} chart;
+
+    up = if x + 1 >= width then null else 
+      searchUp matcher {x = x + 1; y = y - 1;} chart;
+  };
+
+  maybe = f: a: b: if !(builtins.isInt a && builtins.isInt b) then null else f a b;
+  maybeAdd = maybe builtins.add;
+  maybeSub = maybe builtins.sub;
+  column = x: map (index x);
+
+  searchLeft = matcher: {x, y}: chart: chart
+    |> index y
+    |> lib.sublist 0 (x + 1)
     |> lib.reverseList
     |> lib.lists.findFirstIndex matcher null
-    |> maybeSub (y)
+    |> maybeSub x
+  ;
+  searchDown = matcher: {x, y}: chart: chart
+    |> lib.sublist y height
+    |> column x
+    |> lib.lists.findFirstIndex matcher null
+    |> maybeAdd y
+  ;
+  searchRight = matcher: {x, y}: chart: chart
+    |> index y
+    |> lib.sublist x width
+    |> lib.lists.findFirstIndex matcher null
+    |> maybeAdd x
+  ;
+  searchUp = matcher: {x, y}: chart: chart
+    |> lib.sublist 0 (y + 1)
+    |> column x
+    |> lib.reverseList
+    |> lib.lists.findFirstIndex matcher null
+    |> maybeSub y
   ;
 
   firstOb = {
@@ -220,14 +231,46 @@
     x = lib.mod i width;
     y = i / height;
   }) (height * width)
-    |> builtins.filter (pos: index2d pos chart == ".")
-    |> map ({x, y}: replace2d {inherit x y;} "#" chart)
+    |> builtins.filter (pos: index2d pos startingObsMap |> isNull)
+    |> map (pos: insert pos startingObsMap)
   ;
 
-  # this is a really slow way to do this, instead just find the adjacent columns and update accordingly
-  allMaps = allObs |> map getObsMap;
+  replaceColumn = y: lib.zipListsWith (row: new:
+    replace y row new
+  );
 
-  loopyMaps = allMaps
+  insert = {x, y}@pos: chart: let
+    newObs = makeObs chart builtins.isAttrs pos;
+    # nextL = searchRight 
+  in chart
+    |> replace2d pos newObs
+    # update obstacles on rows above and below
+    |> (if y - 1 < 0 then lib.id else nChart: replace (y - 1) (
+        nChart |> index (y - 1)
+          |> lib.imap0 (x: b: if isNull b then null else
+          makeObs nChart builtins.isAttrs {inherit x; y = y - 1;})
+          # |> map (o: if builtins.isAttrs o && o.right > x then
+          #   o // {right = x;} else o)
+      ) nChart)
+    |> (if y + 1 >= width then lib.id else nChart: replace (y + 1) (
+        nChart |> index (y + 1)
+          |> lib.imap0 (x: b: if isNull b then null else
+          makeObs nChart builtins.isAttrs {inherit x; y = y + 1;})
+      ) nChart)
+    |> (if x - 1 < 0 then lib.id else nChart:
+      replaceColumn (x - 1) (column (x - 1) nChart
+        |> lib.imap0 (y: b: if isNull b then null else
+        makeObs nChart builtins.isAttrs {inherit y; x = x - 1;})
+      ) nChart)
+    |> (if x + 1 >= width then lib.id else nChart:
+      replaceColumn (x + 1) (column (x + 1) nChart
+        |> lib.imap0 (y: b: if isNull b then null else
+        makeObs nChart builtins.isAttrs {inherit y; x = x + 1;})
+      ) nChart)
+    
+  ;
+
+  loopyMaps = allObs
     |> builtins.filter (m: (getFastpath {obsMap = m;}).looped);
 
   part2faster = builtins.length loopyMaps;

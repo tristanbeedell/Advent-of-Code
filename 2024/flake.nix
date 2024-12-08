@@ -43,5 +43,17 @@
       ];
     };
 
+    day08 = let
+      solution = import ./08/solution.nix pkgs;
+      example = (pkgs.lib.readFile ./08/example);
+      input = (pkgs.lib.readFile ./08/input);
+    in {
+      solution = solution;
+      part1result = solution.part1result input;
+      test = tix.run [
+        ./08/solution.test.nix
+      ];
+    };
+
   };
 }
