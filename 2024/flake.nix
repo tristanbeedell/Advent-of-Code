@@ -43,5 +43,16 @@
       ];
     };
 
+    day09 = let
+      solution = import ./09/bad.solution.nix pkgs;
+      example = (pkgs.lib.readFile ./09/example.txt);
+    in {
+      example = solution example;
+      real.part1result = "My solution doesn't work on the real input :(";
+      test = tix.run [
+        ./09/solution.test.nix
+      ];
+    };
+
   };
 }
