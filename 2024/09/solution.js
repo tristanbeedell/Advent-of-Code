@@ -49,7 +49,9 @@ const newfiles = files.concat(inserted)
   .filter(file => file.size > 0)
   .sort((a, b) => a.start > b.start)
 
-const checksum = newfiles.reduce((acc, current) => acc + (current.id * current.size * (current.start + (current.size - 1) / 2)), 0)
+const checksum = fs => fs.reduce((acc, current) =>
+  acc + (current.id * current.size * (current.start + (current.size - 1) / 2)),
+0)
 
-console.log(checksum)
+console.log(checksum(newfiles))
 
