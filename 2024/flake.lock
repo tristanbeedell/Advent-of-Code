@@ -1,5 +1,18 @@
 {
   "nodes": {
+    "aoc-inputs": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1733814937,
+        "narHash": "sha256-hF+/daBl8ud8FYSvkhOn1QnpmXEYVfoXDpPM7RKW8Zg=",
+        "path": "/tmp/aoc-inputs",
+        "type": "path"
+      },
+      "original": {
+        "path": "/tmp/aoc-inputs",
+        "type": "path"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1732837521,
@@ -31,6 +44,7 @@
     },
     "root": {
       "inputs": {
+        "aoc-inputs": "aoc-inputs",
         "nixpkgs": "nixpkgs",
         "tix": "tix"
       }

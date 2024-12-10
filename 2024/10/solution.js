@@ -1,5 +1,5 @@
 
-const input = (await Bun.file("input.txt").text()).trim()
+const input = (await Bun.file(Bun.argv[2]).text()).trim()
 
 const rows = [[]];
 

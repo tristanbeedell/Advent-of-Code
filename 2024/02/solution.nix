@@ -1,5 +1,4 @@
-{lib, ...}: {file}: rec {
-  rawContent = builtins.readFile file;
+{lib, ...}: rawContent: rec {
   content = lib.strings.removeSuffix "\n" rawContent;
 
   toLines = lib.strings.splitString "\n";

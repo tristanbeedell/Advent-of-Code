@@ -4,51 +4,60 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     tix.url = "git+https://git.tristans.cloud/tristan/tix";
+    /*
+     * sharing your puzzle inputs is discouraged:
+     * https://adventofcode.com/about#faq_copying
+     * 
+     * so on a new day, paste the input into
+     * /tmp/aoc-inputs/${day number}
+     * 
+     * and run
+     * nix flake update aoc-inputs
+     */
+    aoc-inputs = {
+      url = "path:/tmp/aoc-inputs";
+      flake = false;
+    };
   };
 
-  outputs = { self, nixpkgs, tix }: let
+  outputs = { aoc-inputs, nixpkgs, tix, ... }: let
     pkgs = import nixpkgs {system = "x86_64-linux";};
-  in {
+    inherit (pkgs) lib;
 
-    day06 = let
-      solution = import ./06/solution.nix pkgs;
-      example = (pkgs.lib.readFile ./06/example.txt);
-      input = (pkgs.lib.readFile ./06/input.txt);
-    in {
-      example = (solution example);
-      real = (solution input);
-    };
 
-    day07 = let
-      solution = import ./07/solution.nix pkgs;
-      example = (pkgs.lib.readFile ./07/example.txt);
-      input = (pkgs.lib.readFile ./07/input.txt);
-    in {
-      example = (solution example);
-      real = (solution input);
-      test = tix.run [
-        ./07/solution.test.nix
-      ];
-    };
-
-    day08 = let
-      solution = import ./08/solution.nix pkgs;
-      example = (pkgs.lib.readFile ./08/example);
-      input = (pkgs.lib.readFile ./08/input);
+  in (lib.range 1 8
+  |> map (i: let id = lib.fixedWidthNumber 2 i; in {
+    name = "day-${id}";
+    value = let
+      solution = import ./${id}/solution.nix pkgs;
+      example = (pkgs.lib.readFile ./${id}/example.txt);
+      input = (pkgs.lib.readFile "${aoc-inputs}/${id}");
     in {
       example = solution example;
       real = solution input;
       test = tix.run [
-        ./08/solution.test.nix
+        "./${id}/solution.test.nix"
       ];
     };
+  })
+  |> builtins.listToAttrs
+  ) // {
 
-    day09 = let
+    day-09 = let
       solution = import ./09/bad.solution.nix pkgs;
       example = (pkgs.lib.readFile ./09/example.txt);
+      input = "${aoc-inputs}/09";
     in {
       example = solution example;
       real.part1result = "My solution doesn't work on the real input :(";
+      javascript = {
+        part1result = pkgs.runCommand "2024day9part1" {} ''
+            ${lib.getExe pkgs.bun} ${./09/solution.js} ${input} > $out
+          '' |> builtins.readFile;
+        part2result = pkgs.runCommand "2024day9part1" {} ''
+            ${lib.getExe pkgs.bun} ${./09/solution2.js} ${input} > $out
+          '' |> builtins.readFile;
+      };
       test = tix.run [
         ./09/solution.test.nix
       ];

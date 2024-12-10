@@ -1,5 +1,4 @@
-{lib, ...}: {file}: rec {
-  content = builtins.readFile file;
+{lib, ...}: content: rec {
 
   muls = memory: memory
     |> builtins.split ''mul\(([0-9]{0,3}),([0-9]{0,3})\)''

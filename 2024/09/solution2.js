@@ -1,14 +1,5 @@
 
-const input = (await Bun.file("input.txt").text()).trim()
-
-// const input = "2933133121414131402";
-/*
- *  0123456789
- *  0..1.....2
- *  02.1
- *  021
- */
-
+const input = (await Bun.file(Bun.argv[2]).text()).trim()
 
 const files = [];
 

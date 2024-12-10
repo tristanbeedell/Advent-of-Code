@@ -1,6 +1,5 @@
-{lib, ...}: {file}: rec {
-  rawContent = builtins.readFile file;
-  content = lib.strings.removeSuffix "\n" rawContent;
+{lib, ...}: input: rec {
+  content = lib.strings.removeSuffix "\n" input;
   lines = lib.strings.splitString "\n" content;
   getLeftAndRight = s: s
     |> lib.strings.splitString "   "
