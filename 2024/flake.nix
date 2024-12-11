@@ -41,27 +41,5 @@
     };
   })
   |> builtins.listToAttrs
-  ) // {
-
-    day-09 = let
-      solution = import ./09/bad.solution.nix pkgs;
-      example = (pkgs.lib.readFile ./09/example.txt);
-      input = "${aoc-inputs}/09";
-    in {
-      example = solution example;
-      real.part1result = "My solution doesn't work on the real input :(";
-      javascript = {
-        part1result = pkgs.runCommand "2024day9part1" {} ''
-            ${lib.getExe pkgs.bun} ${./09/solution.js} ${input} > $out
-          '' |> builtins.readFile;
-        part2result = pkgs.runCommand "2024day9part1" {} ''
-            ${lib.getExe pkgs.bun} ${./09/solution2.js} ${input} > $out
-          '' |> builtins.readFile;
-      };
-      test = tix.run [
-        ./09/solution.test.nix
-      ];
-    };
-
-  };
+  );
 }

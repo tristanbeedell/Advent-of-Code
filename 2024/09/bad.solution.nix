@@ -114,9 +114,6 @@ in {
   inherit data disk defrag defragged checksum fullDisk;
 
   part1result = defragged |> checksum;
-
-  # defraggedFullDisk = defragFullDisk fullDisk;
-
-  # part1result = (defragFullDisk fullDisk).acc |> checksumFullDisk;
+  part2result = "My solution is too slow for part 2";
 
 }
