@@ -25,7 +25,7 @@
     inherit (pkgs) lib;
 
 
-  in (lib.range 1 8
+  in (lib.range 1 11
   |> map (i: let id = lib.fixedWidthNumber 2 i; in {
     name = "day-${id}";
     value = let
@@ -36,7 +36,7 @@
       example = solution example;
       real = solution input;
       test = tix.run [
-        "./${id}/solution.test.nix"
+        ./${id}/solution.test.nix
       ];
     };
   })
