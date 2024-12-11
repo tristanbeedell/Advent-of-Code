@@ -1,48 +1,52 @@
-{lib, ...}: input: let
-  inherit (builtins) stringLength concatLists substring foldl';
+{lib, ...}: let
+  inherit (builtins) stringLength concatLists substring foldl' add attrValues;
+  inherit (lib.strings) toIntBase10;
+in input: rec {
 
-  initStones = input
+  blinkStone = stone: count:
+    if toIntBase10 stone == 0 then [{ "1" = count; }]
+    else let
+      strStone = toString (toIntBase10 stone);
+      len = stringLength strStone;
+      left = (substring 0 (len / 2) strStone );
+      right = (substring (len / 2) (len / 2) strStone);
+    in
+    if lib.mod len 2 == 0 then
+      if left == right then [{${left} = count * 2;}] else [
+        { ${left} = count; ${right} = count; }
+      ]
+    else [{
+      ${toString ((toIntBase10 stone) * 2024)} = count;
+    }]
+  ;
+
+  bfast = stones: stones
+    |> (builtins.mapAttrs (stone: blinkStone stone))
+    |> attrValues
+    |> concatLists
+    |> addStones
+  ;
+
+  bfastt = times: stones:
+    if times == 0 then stones |> attrValues |> foldl' add 0
+    else bfastt (times - 1) (bfast stones)
+  ;
+
+  addStones = builtins.zipAttrsWith (stone: foldl' add 0);
+
+  initialStones = input
     |> lib.trim
     |> lib.splitString " "
-    |> map lib.strings.toIntBase10
+    |> map toIntBase10
+    |> toStones
   ;
 
-  blinkStone = stone:
-    if stone == 0 then 1
-    else let
-      strStone = toString stone;
-      len = stringLength strStone;
-    in
-      if lib.mod len 2 == 0 then [
-      (substring 0 (len / 2) strStone |> lib.strings.toIntBase10)
-      (substring (len / 2) (len / 2) strStone |> lib.strings.toIntBase10)
-    ]
-    else stone * 2024
+  toStones = numbers: numbers
+    |> map (number: {name = toString number; value = 1;})
+    |> builtins.listToAttrs
   ;
 
-  blinkStones = stones:
-   if !builtins.isList stones then blinkStone stones
-   else map blinkStones stones
-  ;
-
-  blinkTimes = count: stones: lib.range 1 count |>
-    foldl' (stones: i: blinkStones stones) stones
-  ;
-
-  flattenStones = {count ? 0, stones}: if builtins.isList stones then
-    map (stone: flattenStones {stones = stone;}) stones |> foldl' (a: b: a + b) 0
-  else 1;
-
-in {
-
-  inherit initStones blinkStone blinkTimes blinkStones flattenStones;
-
-  part1result = blinkTimes 25 initStones
-    |> (stones: flattenStones {inherit stones;})
-  ;
-
-  part2result = blinkTimes 75 initStones
-    |> (stones: flattenStones {inherit stones;})
-  ;
+  part1result = bfastt 25 initialStones;
+  part2result = bfastt 75 initialStones;
 
 }
