@@ -3,6 +3,8 @@
   inherit (lib.strings) toIntBase10;
 in input: rec {
 
+  sum = foldl' add 0;
+
   blinkStone = stone: count:
     if toIntBase10 stone == 0 then [{ "1" = count; }]
     else let
@@ -21,18 +23,16 @@ in input: rec {
   ;
 
   bfast = stones: stones
-    |> (builtins.mapAttrs (stone: blinkStone stone))
+    |> builtins.mapAttrs blinkStone
     |> attrValues
     |> concatLists
-    |> addStones
+    |> builtins.zipAttrsWith (stone: sum)
   ;
 
   bfastt = times: stones:
-    if times == 0 then stones |> attrValues |> foldl' add 0
+    if times == 0 then stones |> attrValues |> sum
     else bfastt (times - 1) (bfast stones)
   ;
-
-  addStones = builtins.zipAttrsWith (stone: foldl' add 0);
 
   initialStones = input
     |> lib.trim
