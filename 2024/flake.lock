@@ -3,8 +3,8 @@
     "aoc-inputs": {
       "flake": false,
       "locked": {
-        "lastModified": 1733919427,
-        "narHash": "sha256-9QvGJVeFT1BfuoGcFUWSr6iq4VHiaEd9SKUrl6k2tzw=",
+        "lastModified": 1734085033,
+        "narHash": "sha256-UlLhIP9NbAywjOGRkrULOa0e+AtY2Eb7Vgem/o/pN7Y=",
         "path": "/tmp/aoc-inputs",
         "type": "path"
       },
