@@ -25,7 +25,7 @@
     inherit (pkgs) lib;
 
 
-  in (lib.range 1 13
+  in (lib.range 1 14
   |> map (i: let id = lib.fixedWidthNumber 2 i; in {
     name = "day-${id}";
     value = let
