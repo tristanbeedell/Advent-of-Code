@@ -1,6 +1,6 @@
 {lib, ...}: input: let
   inherit (lib.strings) trim splitString toIntBase10;
-  inherit (builtins) match elemAt filter length;
+  inherit (builtins) match elemAt filter length genList concatStringsSep;
   # real
   width = 101;
   height = 103;
@@ -45,17 +45,40 @@
       x = if x < 0 then width + x else x;
       y = if y < 0 then height + y else y;
     };
-    # inherit vel;
   };
+
+  printMap = robots: genList (y:
+    genList (x:
+      robots
+        |> filter ({pos,...}: pos == {inherit x y;})
+        |> length
+        |> (amt: if amt == 0 then "." else toString amt)
+    ) width
+    |> concatStringsSep ""
+  ) height
+  |> concatStringsSep "\n";
+
+  anim = {start, period}: 100 |> genList (i: let
+    seconds = (i * period) + start;
+  in robots |> map (pass (seconds)) |>
+  (room: ''
+    seconds: ${toString seconds}
+    ${printMap room}
+  '')
+  ) |> concatStringsSep "\n";
 
 in {
 
-  inherit width height pass getQuadrants robots;
+  inherit width height pass getQuadrants robots printMap;
 
   part1result = robots 
     |> map (pass 100)
     |> getQuadrants {inherit width height;}
     |> ({tl, tr, dr, dl}: (length tl) * (length tr) * (length dr) * (length dl))
   ;
+
+  part2result = # figured these settings out after observing the first 500 seconds:
+    anim {start = 14; period = 101;}
+  |> builtins.toFile "robots-anim";
 
 }
