@@ -85,67 +85,11 @@
       east = search {inherit pos; dir = dirs.east;};
       south = search {inherit pos; dir = dirs.south;};
       west = search {inherit pos; dir = dirs.west;};
-    } |> lib.filterAttrs (n: v: !isNull v.pos)) // {
-      # pos = key pos;
-    };
+    } |> lib.filterAttrs (n: v: !isNull v.pos));
   })
   |> listToAttrs;
 
   notNull = value: !isNull value;
-
-###### collecting continuous corners, doesn't work.
-  countDirs = {north ? null, south ? null, east ? null, west ? null, ...}:
-    [north south east west]
-      |> filter (dir: notNull dir && notNull dir.pos)
-      |> length
-  ;
-
-  continue = prev: {dirs, dist ? 0}: let
-    dir = if prev == "north" then "south" else
-      if prev == "south" then "north" else
-      if prev == "west" then "east" else
-      if prev == "east" then "west" else
-        throw "${toString prev} is not a direction!";
-    prevEdge = dirs.${dir};
-  in
-    dirs |> lib.attrsToList |> lib.findFirst (
-      {name, value}: !(name == dir) && !(isDead value)
-    ) null
-    |> (res: res.value // {dir = res.name;})
-    |> (next: let
-      nextCorner = corners.${next.pos};
-    in
-    if isDead nextCorner || isDeadend nextCorner then null else
-    if isNode nextCorner
-      then next // {dist = next.dist + dist + prevEdge.dist + 1000;}
-      else continue next.dir {
-        dirs = nextCorner;
-        dist = dist + prevEdge.dist + 1000;
-      }
-    )
-  ;
-
-  isDead = corner: corner.pos or null == null;
-
-  isNode = corner: let c = countDirs corner; in isTerminal corner || c > 2 || c == 1;
-  isTerminal = corner: corner.pos == key init.goal || corner.pos == key init.pos;
-  isDeadend = corner: let c = countDirs corner; in c == 1;
-
-  nodes = corners |> mapAttrs (start: corner:
-    joinNodes corner
-  );
-
-  joinNodes = corner:
-    corner |> mapAttrs (dir: next:
-      if isDead next || isDeadend next
-        then null
-      else if !isNode corners.${next.pos}
-        then continue dir {dirs = corners.${next.pos};}
-      else
-        next // {inherit dir;})
-    |> lib.filterAttrs (n: v: notNull v)
-  ;
-########
 
   nodeGraph = graph: pkgs.runCommand "graph" {} ''
     mkdir -p $out
@@ -161,7 +105,6 @@
 
   graphs = {
     corners = nodeGraph corners;
-    nodes = nodeGraph nodes;
   };
 
   initScores = {
