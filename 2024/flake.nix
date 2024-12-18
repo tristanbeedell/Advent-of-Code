@@ -29,12 +29,16 @@
   |> map (i: let id = lib.fixedWidthNumber 2 i; in {
     name = "day-${id}";
     value = let
-      solution = import ./${id}/solution.nix pkgs;
+      solution = import ./${id}/solution.nix ( pkgs // {
+        my-lib = import ./lib/. pkgs;
+        inherit input;
+      } );
       example = (pkgs.lib.readFile ./${id}/example.txt);
       example2 = (pkgs.lib.readFile ./${id}/example2.txt);
       example3 = (pkgs.lib.readFile ./${id}/example3.txt);
       input = (pkgs.lib.readFile "${aoc-inputs}/${id}");
     in {
+      inherit solution;
       example = solution example;
       example2 = solution example2;
       example3 = solution example3;
