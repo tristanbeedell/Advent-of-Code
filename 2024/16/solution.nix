@@ -111,6 +111,7 @@
     ${key init.pos} = {
       dir = "east";
       steps = 0;
+      dist = 0;
       turns = 0;
       pos = key init.pos;
     };
@@ -132,18 +133,18 @@
     corners.${prev.pos}
     |> mapAttrs (dir: edge: let
       turns = if prev.dir == dir then prev.turns else prev.turns + 1;
-
       existing = scores.${edge.pos} or null;
       steps = prev.steps + edge.dist;
+      # can't evaluate same turns
+      # because we don't know where we will turn next.
       sameSteps = notNull existing
         && existing.steps == steps
-        # && turns == existing.turns
       ;
       isBetter = isNull existing ||
         (existing.steps > steps);
       newScore = {
         inherit steps dir turns;
-        inherit (edge) pos;
+        inherit (edge) pos dist;
         prev = prev.pos;
       };
     in {
@@ -177,30 +178,50 @@
 
   # WIP:
   # go through the path, add each pos to visited
-  # if point has alt, find points on that path not visited yet.
+  # if point has alt,
+  # TODO: and the alt turns add up to the correct path.
+  # find points on that path.
   # add length of filtered alt, (-1 for the overlap at end?).
   # add alt to visited.
-  pathToList = scores: pos:
+  pathToList = scores: {pos ? key init.goal, visited ? []}:
   let
     res = scores.${pos};
-    prevPath = if res ? prev then pathToList scores res.prev else [];
-    fullaltPath = pathToList scores res.alt.prev;
-    joinIndex = findFirstIndex ({pos,...}: !elem pos (map ({pos, ...}: pos) prevPath)) null fullaltPath;
-    altPath = lib.sublist (joinIndex - 1) (length fullaltPath) fullaltPath;
+    prevPath = if res ? prev
+      then pathToList scores {pos = res.prev; visited = visited;}
+      else {path = []; visited = [pos];};
+    a = pathToList scores {pos = res.alt.prev; visited = visited ++ prevPath.visited;};
+    altPath = if res ? alt
+      then {path = [thisAltSpot] ++ a.path; inherit (a) visited;}
+      else {path = []; visited = [];}
+    ;
 
-    thisSpot = {inherit (res) pos steps turns dir; };
+    thisSpot = {inherit (res) pos steps turns dir dist;
+      alt = altPath.path;
+    };
+    thisAltSpot = {inherit (res.alt) pos steps turns dir dist;
+      alt = [];
+    };
 
-  in
-  prevPath
-  ++
-  [(thisSpot // {
-    alt = if res ? alt then altPath ++ [thisSpot] else null;
-  })]
-  ;
+  in {
+    visited = [pos] ++ prevPath.visited ++ altPath.visited;
+    path =
+      if elem pos visited then [] else
+      [thisSpot]
+      ++
+      prevPath.path
+    ;
+  };
 
   cornerScores = fastest init.goal {};
 
-  part1path = (pathToList cornerScores.scores (key init.goal));
+  addDist = foldl' (acc: {dist,alt,dir,...}:
+    acc + dist + (if addDist alt == 1 then 0 else (addDist alt) - 2)
+  ) 1;
+
+  part1path = (pathToList cornerScores.scores {});
+
+# not 520, too high
+  part2resultWrong = addDist part1path.path;
 
 
 }
