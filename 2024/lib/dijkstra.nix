@@ -1,4 +1,4 @@
-{lib, pkgs, ...}: {pos, goal, chart, width, height}@init: rec {
+{lib, pkgs, ...}: init: rec {
   inherit lib;
   inherit (lib) splitString mod range;
   inherit (lib.lists) findFirstIndex imap0;
@@ -44,14 +44,17 @@
     search {pos = fwd; inherit dir; score = score + 1;}
   ;
 
-  isCorner = pos: index2d pos init.chart == "." &&
-    (dirs
-    |> mapAttrs (name: dir: let n = addVec pos dir; in index2d n init.chart == ".")
-    |> ({north, east, south, west}:
-      north && east || east && south || south && west || west && north))
+  isCorner = pos: index2d pos init.chart == "." # &&
+    # (dirs
+    # |> mapAttrs (name: dir: let n = addVec pos dir; in index2d n init.chart == ".")
+    # |> ({north, east, south, west}:
+    #   north && east || east && south || south && west || west && north))
   ;
 
-  key = {x, y}: "${toString (y + 1)},${toString (x + 1)}";
+  key = {x, y}:
+   "${toString x},${toString y}";
+# gives locations like vim cursor indicator
+#"${toString (y + 1)},${toString (x + 1)}";
 
   corners = range 0 (init.width - 1) |> map (x:
     range 0 (init.height - 1) |> map (y: {inherit x y;})
@@ -105,12 +108,14 @@
       if isNull acc.steps then node else
         if isNull node.steps then acc else
         if acc.steps < node.steps then acc else node
-    ) {turns = null; steps = null;}
+    ) {turns = null; steps = null; pos = null;}
   ;
 
   getScores = {done ? [], scores ? initScores}: let
     prev = getLowest {inherit done scores;};
   in
+    if isNull prev.pos then {inherit done scores; impossible = true;}
+    else
     corners.${prev.pos}
     |> mapAttrs (dir: edge: let
       turns = if prev.dir == dir then prev.turns else prev.turns + 1;
@@ -145,13 +150,18 @@
     })
   ;
 
-  fastest = goal: s: let
+  getFastest = goal: s: let
     next = getScores s;
-  in if elem (key goal) (next.done) then next else fastest goal next;
+  in if next.impossible or false || elem (key goal) (next.done)
+    then next
+    else getFastest goal next;
 
   pathScore = steps: turns: steps + turns * 1000;
 
-  toGoal = (fastest init.goal {}).scores.${key init.goal};
+  isImpossible = (getFastest init.goal {}).impossible or false;
+  fastestTo = (getFastest init.goal {}).scores;
+
+  toGoal = fastestTo.${key init.goal};
 
   part1result = pathScore toGoal.steps toGoal.turns;
 
@@ -193,20 +203,13 @@
     ;
   };
 
-  cornerScores = fastest init.goal {};
+  cornerScores = getFastest init.goal {};
 
-  addDist = foldl' (acc: {dist,alt,dir,...}:
-    acc + dist + (if addDist alt == 1 then 0 else (addDist alt) - 2)
-  ) 1;
+  path = (pathToList cornerScores.scores {}).path;
 
-  part1path = (pathToList cornerScores.scores {});
-
-# not 520, too high
-  part2resultWrong = addDist part1path.path;
-
-  genChart = size: walls: path: genList (y: genList (x:
-    if elem {inherit x y;} walls then "#"
+  pathChart = genList (y: genList (x:
+    if index2d {inherit x y;} init.chart == "#" then "#"
     else if elem (key {inherit x y;}) (map ({pos,...}: pos) path) then "O"
     else "."
-  ) size) size;
+  ) init.width) init.height;
 }

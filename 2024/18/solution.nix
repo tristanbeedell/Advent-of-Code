@@ -1,7 +1,8 @@
 {lib, input ? "", my-lib, ...}@pkgs: rec {
   inherit pkgs;
   inherit lib;
-  inherit (builtins) elemAt genList elem concatStringsSep;
+  inherit my-lib;
+  inherit (builtins) elemAt genList elem concatStringsSep length;
   inherit (lib) splitString;
   inherit (lib.strings) toIntBase10;
 
@@ -21,18 +22,39 @@
 
   chartToStr = chart: chart |> (map (concatStringsSep "")) |> concatStringsSep "\n";
 
+  inherit (my-lib.dijkstra {}) key;
+
   mkSolution = {size, bytes, input}: rec {
     inherit size bytes input;
-    walls = lib.sublist 0 bytes (init input);
-    chart = genChart size walls;
-    part1result = dijkstra.toGoal.steps;
-    dijkstra = my-lib.dijkstra {
+    walls = init input;
+    part1result = p1Dijkstra.toGoal.steps;
+    p1Dijkstra = searchAfterBytes 12;
+
+    searchAfterBytes = bytes: let
+      walls = lib.sublist 0 bytes (init input);
+      chart = genChart size walls;
+    in my-lib.dijkstra {
       pos = {x = 0; y = 0;};
       goal = {x = size - 1; y = size - 1;};
       chart = chart;
       width = size;
       height = size;
     };
+
+    findFirst = bytes: prevPath: let
+      dijkstra = lib.traceSeq "retracing after ${toString bytes} with ${key wall}" (searchAfterBytes bytes);
+      wall = elemAt walls (bytes - 1);
+      wallCollides = elem (key wall) (map ({pos,...}: pos) prevPath);
+    in if !wallCollides
+    then findFirst (bytes + 1) prevPath
+    else
+      if dijkstra.isImpossible
+    then key wall
+    else
+      findFirst (bytes + 1) dijkstra.path;
+
+    part2result = findFirst bytes p1Dijkstra.path;
+
   };
 
   example = mkSolution {
