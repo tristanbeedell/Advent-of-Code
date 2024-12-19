@@ -28,7 +28,7 @@
     inherit size bytes input;
     walls = init input;
     part1result = p1Dijkstra.toGoal.steps;
-    p1Dijkstra = searchAfterBytes 12;
+    p1Dijkstra = searchAfterBytes bytes;
 
     searchAfterBytes = bytes: let
       walls = lib.sublist 0 bytes (init input);
@@ -41,19 +41,40 @@
       height = size;
     };
 
-    findFirst = bytes: prevPath: let
-      dijkstra = lib.traceSeq "retracing after ${toString bytes} with ${key wall}" (searchAfterBytes bytes);
-      wall = elemAt walls (bytes - 1);
-      wallCollides = elem (key wall) (map ({pos,...}: pos) prevPath);
-    in if !wallCollides
-    then findFirst (bytes + 1) prevPath
-    else
-      if dijkstra.isImpossible
-    then key wall
-    else
-      findFirst (bytes + 1) dijkstra.path;
+    findFirst =  {
+      index ? bytes,
+      max ? length walls - 1
+    }: let
+      calcAt = i: rec {
+        index = i;
+        wall = elemAt walls (i - 1);
+        dijkstra = lib.traceSeq "retracing after ${toString index} with ${key wall}" (searchAfterBytes i);
+        possible = !dijkstra.isImpossible;
+      };
 
-    part2result = findFirst bytes p1Dijkstra.path;
+      thisByte = calcAt index;
+      maxByte = calcAt max;
+      midByte = calcAt (index + (max - index) / 2);
+
+      isEnd = index == maxByte.index;
+
+      rightHalf = lib.traceSeq
+        "going right to ${toString (midByte.index + 1)}-${toString max}"
+        (findFirst {index = midByte.index + 1; inherit max;});
+
+      leftHalf = lib.traceSeq
+        "going left to ${toString index}-${toString (midByte.index - 1)}"
+        (findFirst {index = index + 1; max = midByte.index;});
+    in 
+    if isEnd then key thisByte.wall else
+    if !thisByte.possible then "oof" else
+    if midByte.possible then
+      rightHalf
+    else 
+      leftHalf
+    ;
+
+    part2result = findFirst {};
 
   };
 
