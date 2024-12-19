@@ -1,8 +1,6 @@
 
 const input = (await Bun.file(Bun.argv[2]).text()).trim()
 
-// const input = "12345";
-
 const files = [];
 
 const spaces = [];

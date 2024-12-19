@@ -39,10 +39,6 @@
       input = (pkgs.lib.readFile "${aoc-inputs}/${id}");
     in {
       inherit solution;
-      example = solution example;
-      example2 = solution example2;
-      example3 = solution example3;
-      real = solution input;
       test = tix.run [
         ./${id}/solution.test.nix
       ];
